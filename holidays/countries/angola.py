@@ -58,7 +58,7 @@ class Angola(HolidayBase):
         self[date(year, NOV, 11)] = "Dia da Independência"
 
         # Christmas Day
-        self[date(year, DEC, 25)] = "Natal"
+        self[date(year, DEC, 25)] = "Dia de Natal e da Família"
 
         self[easter(year) - rd(days=2)] = "Sexta-feira Santa"
 

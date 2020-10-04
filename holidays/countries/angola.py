@@ -26,7 +26,9 @@ from holidays.holiday_base import HolidayBase
 
 class Angola(HolidayBase):
     """
-    https://pt.wikipedia.org/wiki/Feriados_no_Brasil
+    https://en.wikipedia.org/wiki/Public_holidays_in_Angola
+
+    http://www.siac.gv.ao/downloads/181029-Lei-Feriados.pdf
     """
 
 

@@ -26,9 +26,9 @@ from holidays.holiday_base import HolidayBase
 
 class Angola(HolidayBase):
     """
-    https://en.wikipedia.org/wiki/Public_holidays_in_Angola
-
-    http://www.siac.gv.ao/downloads/181029-Lei-Feriados.pdf
+    Official Holidays in Angola in their current form
+    Source1: https://en.wikipedia.org/wiki/Public_holidays_in_Angola
+    Source2: http://www.siac.gv.ao/downloads/181029-Lei-Feriados.pdf
     """
 
 
@@ -37,36 +37,55 @@ class Angola(HolidayBase):
         self.country = 'AO'
         HolidayBase.__init__(self, **kwargs)
 
+    def _long_weekends(self, description, full_date):
+        """
+        According to the most recently low in Angola:
+        If the holidays happens to be on a Tuesday, the Monday before that is a holiday as well,
+        If it happens to be on a Thursday, the Friday before it is a Holiday as well
+        """
+
+        if date(*full_date).weekday() in WEEKEND:
+            pass
+        elif date(*full_date).weekday() == TUE:
+            self[date(*full_date)] = description
+            self[date(*full_date) - rd(days=1)] = description + " (Ponte antes do feriado)"
+
+        elif date(*full_date).weekday() == THU:
+            self[date(*full_date)] = description
+            self[date(*full_date) + rd(days=1)] = description + " (Ponte depois do feriado)"
+        else:
+            self[date(*full_date)] = description
+
+
+
+
+
     def _populate(self, year):
         # New Year's Day
-        self[date(year, JAN, 1)] = "Ano novo"
+        self._long_weekends("Ano novo", [year, JAN, 1])
 
-        self[date(year, FEB, 4)] = "Dia do Início da Luta Armada"
+        self._long_weekends("Dia do Início da Luta Armada", [year, FEB, 4])
 
-        self[date(year, MAR, 8)] = "Dia Internacional da Mulher"
+        self._long_weekends("Dia Internacional da Mulher",[year, MAR, 8])
 
-        self[date(year, MAR, 23)] = "Dia da Libertação da África Austral"
+        self._long_weekends("Dia da Libertação da África Austral",[year, MAR, 23])
 
-        self[date(year, APR, 4)] = "Dia da Paz e Reconciliação"
+        self._long_weekends("Dia da Paz e Reconciliação",[year, APR, 4 ])
 
-        self[date(year, MAY, 1)] = "Dia Mundial do Trabalho"
+        self._long_weekends("Dia Mundial do Trabalho",[year, MAY, 1])
 
-        self[date(year, SEP, 17)] = "Dia Nacional dos Heróis"
+        self._long_weekends("Dia do Herói Nacional",[ year, SEP, 17 ])
 
-        self[date(year, NOV, 2)] = "Dia dos Finados"
+        self._long_weekends("Dia dos Finados",[year, NOV, 2])
 
-        self[date(year, NOV, 11)] = "Dia da Independência"
+        self._long_weekends("Dia da Independência",[ year, NOV, 11 ])
 
         # Christmas Day
-        self[date(year, DEC, 25)] = "Dia de Natal e da Família"
+        self._long_weekends("Dia de Natal e da Família",[year, DEC, 25 ])
 
         self[easter(year) - rd(days=2)] = "Sexta-feira Santa"
-
         self[easter(year)] = "Páscoa"
-
-
         quaresma = easter(year) - rd(days=46)
-
         self[quaresma - rd(weekday=TU(-1))] = "Carnaval"
 
 
